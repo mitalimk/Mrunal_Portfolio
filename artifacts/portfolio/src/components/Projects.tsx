@@ -107,10 +107,19 @@ function ProjectCard({ project, idx }: { project: (typeof projects)[0]; idx: num
               {project.url}
             </div>
           </div>
-          <div className="flex-1 relative">
+          <div className="relative overflow-hidden" style={{ height: "300px" }}>
             <iframe
               src={project.url}
-              className="w-full h-full min-h-[280px] border-none"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "200%",
+                height: "200%",
+                transform: "scale(0.5)",
+                transformOrigin: "top left",
+                border: "none",
+              }}
               title={project.title}
               loading="lazy"
               sandbox="allow-scripts allow-same-origin allow-forms"

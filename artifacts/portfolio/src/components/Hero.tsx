@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Download, ChevronDown, Github, Linkedin } from "lucide-react";
 import resumePdf from "@assets/Mrunal_Kulkarni_Resume_1777716565727.pdf";
-import profileImg from "@assets/log_1777727566312.jpeg";
+import profileImg from "@assets/profile_nobg.png";
 import { E } from "./EditableText";
 
 const roles = ["Full-Stack Developer", "DevOps Enthusiast"];
@@ -129,57 +129,59 @@ export default function Hero() {
         {/* Right: Profile Image */}
         <motion.div
           className="flex-shrink-0 flex justify-center"
-          initial={{ opacity: 0, scale: 0.8, x: 40 }}
+          initial={{ opacity: 0, scale: 0.85, x: 40 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 100 }}
         >
           <motion.div
-            className="relative"
-            animate={{ y: [-6, 6, -6] }}
+            className="relative flex items-end justify-center"
+            style={{ width: "280px", height: "340px" }}
+            animate={{ y: [-5, 5, -5] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
-            {/* Glow blob behind card */}
-            <div className="absolute inset-6 bg-primary/25 blur-3xl rounded-full pointer-events-none" />
-
-            {/* Card */}
+            {/* Large pink glow bloom behind figure */}
             <div
-              className="relative rounded-2xl overflow-hidden border-2 border-primary/50"
-              style={{
-                transform: "rotate(-2deg)",
-                boxShadow: "0 0 50px rgba(233,99,166,0.22), 0 25px 50px rgba(0,0,0,0.6)",
-                width: "260px",
-              }}
-            >
-              {/* Pink gradient top strip */}
-              <div className="h-1.5 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(233,99,166,0.28) 0%, rgba(233,99,166,0.08) 55%, transparent 75%)" }}
+            />
 
-              {/* Photo */}
-              <img
-                src={profileImg}
-                alt="Mrunal Kulkarni"
-                className="block w-full object-cover"
-              />
+            {/* Decorative base ring */}
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full border border-primary/20 pointer-events-none"
+              style={{ width: "200px", height: "20px", background: "radial-gradient(ellipse, rgba(233,99,166,0.18) 0%, transparent 70%)" }}
+            />
 
-              {/* Bottom overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 py-5">
-                <p className="text-primary text-sm font-bold leading-tight">Mrunal Kulkarni</p>
-                <p className="text-white/55 text-xs mt-0.5">B.Tech CSE · Full Stack Dev</p>
-              </div>
-            </div>
+            {/* The figure — transparent PNG on dark bg */}
+            <img
+              src={profileImg}
+              alt="Mrunal Kulkarni"
+              className="relative z-10 h-full w-auto object-contain"
+              style={{ filter: "drop-shadow(0 0 18px rgba(233,99,166,0.45)) drop-shadow(0 20px 40px rgba(0,0,0,0.7))" }}
+            />
 
-            {/* Floating code badge */}
+            {/* Floating code badge top-right */}
             <motion.div
-              className="absolute -top-4 -right-6 bg-card border border-primary/50 rounded-lg px-3 py-1.5 text-xs text-primary shadow-xl z-10"
-              animate={{ rotate: [-2, 2, -2], y: [0, -3, 0] }}
+              className="absolute top-4 -right-4 bg-card border border-primary/50 rounded-lg px-3 py-1.5 text-xs text-primary shadow-xl z-20"
+              animate={{ rotate: [-2, 2, -2], y: [0, -4, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
               &lt;/code&gt;
             </motion.div>
 
-            {/* Floating year badge */}
+            {/* Floating tech badge top-left */}
             <motion.div
-              className="absolute -bottom-4 -left-6 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 text-xs font-bold shadow-xl z-10"
-              animate={{ rotate: [2, -2, 2], y: [0, 3, 0] }}
+              className="absolute top-16 -left-6 bg-card border border-primary/30 rounded-lg px-2.5 py-1 text-[11px] text-muted-foreground shadow-lg z-20 flex items-center gap-1.5"
+              animate={{ rotate: [1, -1, 1], y: [0, 3, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              Full Stack Dev
+            </motion.div>
+
+            {/* Floating year badge bottom-right */}
+            <motion.div
+              className="absolute bottom-8 -right-5 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 text-xs font-bold shadow-xl z-20"
+              animate={{ rotate: [2, -1, 2], y: [0, 4, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               CSE 2026
