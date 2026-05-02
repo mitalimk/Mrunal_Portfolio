@@ -3,11 +3,7 @@ import { motion } from "framer-motion";
 import { Download, ChevronDown, Github, Linkedin, Camera, Code2 } from "lucide-react";
 import resumePdf from "@assets/Mrunal_Kulkarni_Resume_1777716565727.pdf";
 
-const roles = [
-  "Full-Stack Developer",
-  "DevOps Enthusiast",
-  "Open Source Contributor",
-];
+const roles = ["Full-Stack Developer", "DevOps Enthusiast", "Open Source Contributor"];
 
 export default function Hero() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
@@ -70,7 +66,7 @@ export default function Hero() {
       transition={{ duration: 0.5 }}
     >
       <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
-        {/* Left: Text Content */}
+        {/* Left: Text */}
         <motion.div
           className="flex-1"
           initial={{ opacity: 0, x: -40 }}
@@ -96,9 +92,7 @@ export default function Hero() {
               mrunalkulkarni160170@gmail.com
             </a>
             <span className="hidden sm:inline text-primary">|</span>
-            <a href="tel:+919960560170" className="hover:text-primary transition-colors">
-              +91 9960560170
-            </a>
+            <a href="tel:+919960560170" className="hover:text-primary transition-colors">+91 9960560170</a>
           </div>
 
           <div className="flex flex-wrap gap-4 items-center">
@@ -141,7 +135,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Right: Profile Image Frame */}
+        {/* Right: Profile Image */}
         <motion.div
           className="flex-shrink-0 flex justify-center"
           initial={{ opacity: 0, scale: 0.8, x: 40 }}
@@ -149,73 +143,51 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 100 }}
         >
           <div className="relative w-56 h-56 md:w-72 md:h-72">
-            {/* Outer spinning dashed ring */}
-            <div
-              className="absolute inset-0 rounded-full border-2 border-dashed border-primary/40 animate-spin-slow"
-              style={{ borderSpacing: "8px" }}
-            />
+            {/* Spinning dashed ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-primary/40 animate-spin-slow" />
             {/* Static inner ring */}
             <div className="absolute inset-3 rounded-full border border-primary/20" />
             {/* Corner accent dots */}
             {[0, 90, 180, 270].map((deg) => (
               <div
                 key={deg}
-                className="absolute w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(74,222,128,0.8)]"
+                className="absolute w-2.5 h-2.5 rounded-full bg-primary"
                 style={{
                   top: "50%",
                   left: "50%",
                   transform: `rotate(${deg}deg) translateY(-50%) translateX(-50%) translateY(-6.5rem)`,
                   marginTop: "-5px",
                   marginLeft: "-5px",
+                  boxShadow: "0 0 8px rgba(233,99,166,0.8)",
                 }}
               />
             ))}
 
-            {/* Clickable image area */}
+            {/* Clickable image */}
             <div
               className="absolute inset-5 rounded-full overflow-hidden bg-card border-2 border-primary glow-border cursor-pointer group"
               onClick={() => fileInputRef.current?.click()}
               data-testid="profile-image-upload"
             >
               {profileImage ? (
-                <img
-                  src={profileImage}
-                  alt="Mrunal Kulkarni"
-                  className="w-full h-full object-cover"
-                  data-testid="img-profile"
-                />
+                <img src={profileImage} alt="Mrunal Kulkarni" className="w-full h-full object-cover" data-testid="img-profile" />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-card to-secondary">
                   <Code2 size={44} className="text-primary/30 mb-2" />
-                  <span className="font-mono text-[10px] text-primary/50 text-center px-2 leading-tight">
-                    click to add photo
-                  </span>
+                  <span className="font-mono text-[10px] text-primary/50 text-center px-2 leading-tight">click to add photo</span>
                 </div>
               )}
-
-              {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center">
                 <Camera size={28} className="text-primary mb-1.5" />
-                <span className="font-mono text-xs text-primary">
-                  {profileImage ? "Change Photo" : "Add Photo"}
-                </span>
+                <span className="font-mono text-xs text-primary">{profileImage ? "Change Photo" : "Add Photo"}</span>
               </div>
             </div>
 
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-              data-testid="input-profile-image"
-            />
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} data-testid="input-profile-image" />
           </div>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-muted-foreground hover:text-primary transition-colors"
         onClick={scrollToProjects}
