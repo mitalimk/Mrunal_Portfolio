@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Terminal } from "lucide-react";
+import { E } from "./EditableText";
 
 const techStack = ["PostgreSQL", "Express.js", "React", "Node.js", "Git", "GitHub"];
 
@@ -36,12 +37,13 @@ export default function Experience() {
     <section id="experience" ref={ref} className="scroll-mt-24">
       <div ref={headingRef} className="mb-12">
         <motion.h2
-          className="text-3xl font-bold flex items-center font-mono mb-3"
+          className="text-3xl font-bold flex items-center mb-3"
           initial={{ opacity: 0, y: -20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-primary mr-3 text-xl">// 02.</span>experience
+          <span className="text-primary mr-3 text-xl">// 02.</span>
+          <E id="experience-heading">experience</E>
         </motion.h2>
         <motion.div
           className="h-px bg-gradient-to-r from-primary/60 via-primary/20 to-transparent"
@@ -65,7 +67,7 @@ export default function Experience() {
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-primary/80" />
           </div>
-          <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground ml-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground ml-2">
             <Terminal size={12} className="text-primary" />
             <span>career.sh</span>
             <span className="text-primary/60 ml-2">— zsh</span>
@@ -80,16 +82,20 @@ export default function Experience() {
             transition={{ delay: 0.25 }}
           >
             <div>
-              <div className="font-mono text-xs text-primary/70 mb-1">$ whoami --role</div>
-              <h3 className="text-2xl font-bold text-foreground">Software Development Intern</h3>
-              <p className="text-lg text-primary font-mono mt-1">JBB Technologies Pvt Ltd</p>
+              <div className="text-xs text-primary/70 mb-1">$ whoami --role</div>
+              <h3 className="text-2xl font-bold text-foreground">
+                <E id="exp-role">Software Development Intern</E>
+              </h3>
+              <p className="text-lg text-primary mt-1">
+                <E id="exp-company">JBB Technologies Pvt Ltd</E>
+              </p>
             </div>
             <div className="flex flex-col items-start md:items-end gap-1">
-              <span className="font-mono text-xs text-muted-foreground bg-secondary px-3 py-1.5 rounded-md border border-border">
-                Jan 2026 – Present
+              <span className="text-xs text-muted-foreground bg-secondary px-3 py-1.5 rounded-md border border-border">
+                <E id="exp-date">Jan 2026 – Present</E>
               </span>
               <motion.span
-                className="text-xs font-mono text-primary/70"
+                className="text-xs text-primary/70"
                 animate={{ opacity: [1, 0.3, 1] }}
                 transition={{ duration: 1.4, repeat: Infinity }}
               >
@@ -98,7 +104,7 @@ export default function Experience() {
             </div>
           </motion.div>
 
-          <div className="font-mono text-xs text-primary/60 mb-3">$ cat responsibilities.txt</div>
+          <div className="text-xs text-primary/60 mb-3">$ cat responsibilities.txt</div>
           <motion.ul
             className="space-y-3 text-muted-foreground mb-8"
             variants={listVariants}
@@ -107,13 +113,13 @@ export default function Experience() {
           >
             {bullets.map((point, i) => (
               <motion.li key={i} className="flex items-start gap-3" variants={itemVariants}>
-                <span className="text-primary mt-0.5 flex-shrink-0 font-mono text-sm">▹</span>
-                <span className="leading-relaxed">{point}</span>
+                <span className="text-primary mt-0.5 flex-shrink-0 text-sm">▹</span>
+                <E id={`exp-bullet-${i}`}>{point}</E>
               </motion.li>
             ))}
           </motion.ul>
 
-          <div className="font-mono text-xs text-primary/60 mb-3">$ cat stack.json</div>
+          <div className="text-xs text-primary/60 mb-3">$ cat stack.json</div>
           <motion.div
             className="flex flex-wrap gap-2"
             variants={{
@@ -125,8 +131,8 @@ export default function Experience() {
           >
             {techStack.map((tech) => (
               <motion.div key={tech} variants={badgeVariants}>
-                <Badge variant="outline" className="font-mono text-primary border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors">
-                  {tech}
+                <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors">
+                  <E id={`exp-tech-${tech}`}>{tech}</E>
                 </Badge>
               </motion.div>
             ))}

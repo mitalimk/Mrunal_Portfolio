@@ -103,7 +103,7 @@
   --chart-4: 280 65% 55%;
   --chart-5: 310 70% 55%;
 
-  --app-font-sans: 'Inter', sans-serif;
+  --app-font-sans: 'JetBrains Mono', monospace;
   --app-font-serif: Georgia, serif;
   --app-font-mono: 'JetBrains Mono', monospace;
   --radius: .5rem;

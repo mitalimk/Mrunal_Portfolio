@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { E } from "./EditableText";
 
 const skillCategories = [
   { title: "Frontend",       prefix: "<",    suffix: "/>", skills: ["HTML", "CSS", "JavaScript", "React", "Bootstrap"],                                     color: "from-pink-500/10 to-pink-500/5"   },
@@ -42,12 +43,12 @@ function SkillCard({ category, index }: { category: (typeof skillCategories)[0];
           animate={isInView ? { opacity: [1, 0.3, 1] } : { opacity: 0 }}
           transition={{ duration: 1.6, repeat: Infinity, delay: index * 0.2 }}
         />
-        <span className="font-mono text-[10px] text-primary/50">active</span>
+        <span className="text-[10px] text-primary/50">active</span>
       </div>
 
-      <h3 className="text-base font-mono font-semibold text-primary mb-5 flex items-center gap-1">
+      <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-1">
         <span className="opacity-50 text-sm">{category.prefix}</span>
-        <span>{category.title}</span>
+        <E id={`skill-cat-${index}-title`}>{category.title}</E>
         {category.suffix && <span className="opacity-50 text-sm">{category.suffix}</span>}
       </h3>
 
@@ -60,14 +61,14 @@ function SkillCard({ category, index }: { category: (typeof skillCategories)[0];
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {category.skills.map((skill) => (
+        {category.skills.map((skill, si) => (
           <motion.span
             key={skill}
             variants={badgeVariants}
-            className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-colors cursor-default"
+            className="px-3 py-1 text-xs rounded-md bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-colors cursor-default"
             whileHover={{ scale: 1.06 }}
           >
-            {skill}
+            <E id={`skill-cat-${index}-skill-${si}`}>{skill}</E>
           </motion.span>
         ))}
       </motion.div>
@@ -88,12 +89,13 @@ export default function Skills() {
     <section id="skills" className="scroll-mt-24">
       <div ref={headingRef} className="mb-12">
         <motion.h2
-          className="text-3xl font-bold flex items-center font-mono mb-3"
+          className="text-3xl font-bold flex items-center mb-3"
           initial={{ opacity: 0, y: -20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-primary mr-3 text-xl">// 03.</span>skills
+          <span className="text-primary mr-3 text-xl">// 03.</span>
+          <E id="skills-heading">skills</E>
         </motion.h2>
         <motion.div
           className="h-px bg-gradient-to-r from-primary/60 via-primary/20 to-transparent"

@@ -1,18 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, ChevronDown, Github, Linkedin, Camera, Code2 } from "lucide-react";
+import { Download, ChevronDown, Github, Linkedin } from "lucide-react";
 import resumePdf from "@assets/Mrunal_Kulkarni_Resume_1777716565727.pdf";
+import profileImg from "@assets/log_1777727566312.jpeg";
+import { E } from "./EditableText";
 
-const roles = ["Full-Stack Developer", "DevOps Enthusiast", "Open Source Contributor"];
+const roles = ["Full-Stack Developer", "DevOps Enthusiast"];
 
 export default function Hero() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(() => {
-    try { return localStorage.getItem("portfolio-profile-image"); } catch { return null; }
-  });
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const currentRole = roles[currentRoleIndex];
@@ -39,19 +37,6 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentRoleIndex]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      setProfileImage(dataUrl);
-      try { localStorage.setItem("portfolio-profile-image", dataUrl); } catch {}
-    };
-    reader.readAsDataURL(file);
-    e.target.value = "";
-  };
-
   const scrollToProjects = () => {
     const el = document.getElementById("projects");
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
@@ -73,33 +58,39 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <p className="font-mono text-primary mb-4 text-lg tracking-wider">Hello, World! I am</p>
+          <p className="text-primary mb-4 text-lg tracking-wider">
+            <E id="hero-greeting">Hello, World! I am</E>
+          </p>
           <h1 className="text-5xl md:text-7xl font-bold mb-4 text-foreground glow-green tracking-tight">
-            Mrunal Kulkarni
+            <E id="hero-name">Mrunal Kulkarni</E>
           </h1>
           <h2 className="text-2xl md:text-3xl font-semibold text-muted-foreground mb-6 flex items-center min-h-[2.5rem]">
-            <span className="font-mono text-primary/80">&gt;</span>
+            <span className="text-primary/80">&gt;</span>
             <span className="ml-3">{displayedText}</span>
             <span className="w-[3px] h-7 bg-primary ml-1 animate-pulse" />
           </h2>
 
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            B.Tech CSE student at MIT Chhatrapati Sambhajinagar, building scalable full-stack applications with modern DevOps practices.
+            <E id="hero-bio">
+              B.Tech CSE student at MIT Chhatrapati Sambhajinagar, building scalable full-stack applications with modern DevOps practices.
+            </E>
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 font-mono text-sm text-muted-foreground mb-8">
-            <a href="mailto:mrunalkulkarni160170@gmail.com" className="hover:text-primary transition-colors">
+          <div className="flex flex-col sm:flex-row gap-3 text-sm text-muted-foreground mb-8">
+            <E id="hero-email" as="a" className="hover:text-primary transition-colors">
               mrunalkulkarni160170@gmail.com
-            </a>
+            </E>
             <span className="hidden sm:inline text-primary">|</span>
-            <a href="tel:+919960560170" className="hover:text-primary transition-colors">+91 9960560170</a>
+            <E id="hero-phone" as="a" className="hover:text-primary transition-colors">
+              +91 9960560170
+            </E>
           </div>
 
           <div className="flex flex-wrap gap-4 items-center">
             <a
               href={resumePdf}
               download
-              className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-mono font-semibold rounded-md hover:bg-primary/90 transition-colors glow-border"
+              className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-bold rounded-md hover:bg-primary/90 transition-colors glow-border"
               data-testid="button-download-resume"
             >
               <Download size={18} />
@@ -107,14 +98,14 @@ export default function Hero() {
             </a>
             <button
               onClick={scrollToProjects}
-              className="px-6 py-3 border border-primary text-primary font-mono font-semibold rounded-md hover:bg-primary/10 transition-colors"
+              className="px-6 py-3 border border-primary text-primary font-bold rounded-md hover:bg-primary/10 transition-colors"
               data-testid="button-view-projects"
             >
               View Projects
             </button>
             <div className="flex gap-3 ml-2">
               <a
-                href="https://github.com"
+                href="https://github.com/mitalimk?tab=repositories"
                 target="_blank"
                 rel="noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors p-2 border border-border rounded-md hover:border-primary"
@@ -142,49 +133,58 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 100 }}
         >
-          <div className="relative w-56 h-56 md:w-72 md:h-72">
-            {/* Spinning dashed ring */}
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-primary/40 animate-spin-slow" />
-            {/* Static inner ring */}
-            <div className="absolute inset-3 rounded-full border border-primary/20" />
-            {/* Corner accent dots */}
-            {[0, 90, 180, 270].map((deg) => (
-              <div
-                key={deg}
-                className="absolute w-2.5 h-2.5 rounded-full bg-primary"
-                style={{
-                  top: "50%",
-                  left: "50%",
-                  transform: `rotate(${deg}deg) translateY(-50%) translateX(-50%) translateY(-6.5rem)`,
-                  marginTop: "-5px",
-                  marginLeft: "-5px",
-                  boxShadow: "0 0 8px rgba(233,99,166,0.8)",
-                }}
-              />
-            ))}
+          <motion.div
+            className="relative"
+            animate={{ y: [-6, 6, -6] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {/* Glow blob behind card */}
+            <div className="absolute inset-6 bg-primary/25 blur-3xl rounded-full pointer-events-none" />
 
-            {/* Clickable image */}
+            {/* Card */}
             <div
-              className="absolute inset-5 rounded-full overflow-hidden bg-card border-2 border-primary glow-border cursor-pointer group"
-              onClick={() => fileInputRef.current?.click()}
-              data-testid="profile-image-upload"
+              className="relative rounded-2xl overflow-hidden border-2 border-primary/50"
+              style={{
+                transform: "rotate(-2deg)",
+                boxShadow: "0 0 50px rgba(233,99,166,0.22), 0 25px 50px rgba(0,0,0,0.6)",
+                width: "260px",
+              }}
             >
-              {profileImage ? (
-                <img src={profileImage} alt="Mrunal Kulkarni" className="w-full h-full object-cover" data-testid="img-profile" />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-card to-secondary">
-                  <Code2 size={44} className="text-primary/30 mb-2" />
-                  <span className="font-mono text-[10px] text-primary/50 text-center px-2 leading-tight">click to add photo</span>
-                </div>
-              )}
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center">
-                <Camera size={28} className="text-primary mb-1.5" />
-                <span className="font-mono text-xs text-primary">{profileImage ? "Change Photo" : "Add Photo"}</span>
+              {/* Pink gradient top strip */}
+              <div className="h-1.5 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
+
+              {/* Photo */}
+              <img
+                src={profileImg}
+                alt="Mrunal Kulkarni"
+                className="block w-full object-cover"
+              />
+
+              {/* Bottom overlay */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-4 py-5">
+                <p className="text-primary text-sm font-bold leading-tight">Mrunal Kulkarni</p>
+                <p className="text-white/55 text-xs mt-0.5">B.Tech CSE · Full Stack Dev</p>
               </div>
             </div>
 
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} data-testid="input-profile-image" />
-          </div>
+            {/* Floating code badge */}
+            <motion.div
+              className="absolute -top-4 -right-6 bg-card border border-primary/50 rounded-lg px-3 py-1.5 text-xs text-primary shadow-xl z-10"
+              animate={{ rotate: [-2, 2, -2], y: [0, -3, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              &lt;/code&gt;
+            </motion.div>
+
+            {/* Floating year badge */}
+            <motion.div
+              className="absolute -bottom-4 -left-6 bg-primary text-primary-foreground rounded-lg px-3 py-1.5 text-xs font-bold shadow-xl z-10"
+              animate={{ rotate: [2, -2, 2], y: [0, 3, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              CSE 2026
+            </motion.div>
+          </motion.div>
         </motion.div>
       </div>
 

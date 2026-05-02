@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Download, ExternalLink, FileText, ChevronDown, Eye, EyeOff } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import resumePdf from "@assets/Mrunal_Kulkarni_Resume_1777716565727.pdf";
+import { E } from "./EditableText";
 
 const LOG_LINES = [
   { delay: 0,    text: "$ access --file resume.pdf --user visitor" },
@@ -19,7 +20,6 @@ export default function Resume() {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<"idle" | "loading" | "done">("idle");
   const [visibleLogs, setVisibleLogs] = useState(0);
-  const [pdfOpen, setPdfOpen] = useState(false);
 
   useEffect(() => {
     if (!isInView) {
@@ -55,12 +55,13 @@ export default function Resume() {
     <section id="resume" ref={sectionRef} className="scroll-mt-24 mb-24">
       <div ref={headingRef} className="mb-12">
         <motion.h2
-          className="text-3xl font-bold flex items-center font-mono mb-3"
+          className="text-3xl font-bold flex items-center mb-3"
           initial={{ opacity: 0, y: -20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-primary mr-3 text-xl">// 06.</span>resume
+          <span className="text-primary mr-3 text-xl">// 06.</span>
+          <E id="resume-heading">resume</E>
         </motion.h2>
         <motion.div
           className="h-px bg-gradient-to-r from-primary/60 via-primary/20 to-transparent"
@@ -71,7 +72,6 @@ export default function Resume() {
         />
       </div>
 
-      {/* Main resume card */}
       <motion.div
         className="relative bg-card border border-border rounded-2xl overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
@@ -86,7 +86,7 @@ export default function Resume() {
             <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
             <div className="w-3 h-3 rounded-full bg-primary/70" />
           </div>
-          <div className="font-mono text-xs text-muted-foreground ml-2 flex items-center gap-2">
+          <div className="text-xs text-muted-foreground ml-2 flex items-center gap-2">
             <FileText size={12} className="text-primary" />
             <span>resume_access.sh</span>
           </div>
@@ -95,7 +95,7 @@ export default function Resume() {
         {/* Terminal body */}
         <div className="px-6 md:px-10 py-8">
           {/* Log output */}
-          <div className="font-mono text-sm mb-5 space-y-1.5 min-h-[6rem]">
+          <div className="text-sm mb-5 space-y-1.5 min-h-[6rem]">
             {LOG_LINES.slice(0, visibleLogs).map((line, i) => (
               <motion.div
                 key={i}
@@ -109,7 +109,7 @@ export default function Resume() {
             ))}
             {phase === "loading" && (
               <motion.span
-                className="text-primary/60 font-mono"
+                className="text-primary/60"
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ duration: 0.7, repeat: Infinity }}
               >_</motion.span>
@@ -119,7 +119,7 @@ export default function Resume() {
           {/* Progress bar */}
           {phase !== "idle" && (
             <div className="mb-8">
-              <div className="flex justify-between font-mono text-xs text-muted-foreground mb-2">
+              <div className="flex justify-between text-xs text-muted-foreground mb-2">
                 <span>loading resume.pdf</span>
                 <span className="text-primary">{Math.min(progress, 100)}%</span>
               </div>
@@ -140,84 +140,32 @@ export default function Resume() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
+                className="flex flex-col md:flex-row items-start md:items-center gap-8"
               >
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-6">
-                  <div className="flex-1">
-                    <p className="font-mono text-primary text-sm mb-1">&gt; resume.pdf — ready</p>
-                    <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight mb-2">
-                      Wanna peek at{" "}
-                      <span className="text-primary glow-green">my resume?</span>
-                    </h3>
-                    <p className="text-muted-foreground text-sm font-mono">
-                      Preview inline or grab a copy.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-                    <button
-                      onClick={() => setPdfOpen((v) => !v)}
-                      className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-mono font-semibold rounded-lg hover:bg-primary/90 transition-all glow-border group"
-                      data-testid="button-toggle-resume"
-                    >
-                      {pdfOpen ? <EyeOff size={17} /> : <Eye size={17} />}
-                      {pdfOpen ? "Close Preview" : "Open Preview"}
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-300 ${pdfOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    <a
-                      href={resumePdf}
-                      download
-                      className="flex items-center gap-2 px-6 py-3 border border-primary text-primary font-mono font-semibold rounded-lg hover:bg-primary/10 transition-colors"
-                      data-testid="button-download-resume-section"
-                    >
-                      <Download size={17} />
-                      Download
-                    </a>
-                    <a
-                      href={resumePdf}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 px-6 py-3 border border-border text-muted-foreground font-mono text-sm rounded-lg hover:border-primary hover:text-primary transition-colors"
-                      data-testid="button-open-resume"
-                    >
-                      <ExternalLink size={16} />
-                      Full Screen
-                    </a>
-                  </div>
+                <div className="flex-1">
+                  <p className="text-primary text-sm mb-1">&gt; resume.pdf — ready</p>
+                  <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight mb-2">
+                    <E id="resume-cta-line1">Wanna peek at </E>
+                    <span className="text-primary glow-green">
+                      <E id="resume-cta-highlight">my resume?</E>
+                    </span>
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    <E id="resume-cta-sub">Grab a copy below.</E>
+                  </p>
                 </div>
 
-                {/* Inline PDF accordion */}
-                <AnimatePresence>
-                  {pdfOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "80vh", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
-                      className="overflow-hidden rounded-xl border border-border"
-                    >
-                      {/* Mini browser bar inside expanded viewer */}
-                      <div className="bg-secondary/60 border-b border-border px-4 py-2 flex items-center gap-2 flex-shrink-0">
-                        <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
-                        </div>
-                        <div className="flex-1 max-w-xs mx-auto text-center font-mono text-xs text-muted-foreground bg-background/50 border border-border rounded px-3 py-1 truncate">
-                          Mrunal_Kulkarni_Resume.pdf
-                        </div>
-                      </div>
-                      <iframe
-                        src={`${resumePdf}#toolbar=0`}
-                        className="w-full border-none"
-                        style={{ height: "calc(80vh - 40px)" }}
-                        title="Resume PDF"
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="flex-shrink-0">
+                  <a
+                    href={resumePdf}
+                    download
+                    className="flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-bold rounded-lg hover:bg-primary/90 transition-all glow-border text-base"
+                    data-testid="button-download-resume-section"
+                  >
+                    <Download size={20} />
+                    Download Resume
+                  </a>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

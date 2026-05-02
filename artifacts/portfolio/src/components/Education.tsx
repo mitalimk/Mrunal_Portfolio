@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { GraduationCap } from "lucide-react";
+import { E } from "./EditableText";
 
 const educationData = [
   {
@@ -37,7 +38,7 @@ function EducationCard({ edu, index }: { edu: (typeof educationData)[0]; index: 
     <div ref={ref} className="relative flex gap-6 group">
       <div className="flex flex-col items-center">
         <motion.div
-          className="relative z-10 w-12 h-12 rounded-xl bg-card border-2 border-primary flex items-center justify-center font-mono text-primary text-xs font-bold flex-shrink-0"
+          className="relative z-10 w-12 h-12 rounded-xl bg-card border-2 border-primary flex items-center justify-center text-primary text-xs font-bold flex-shrink-0"
           initial={{ scale: 0, rotate: -90 }}
           animate={isInView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -90 }}
           transition={{ duration: 0.5, delay: index * 0.15, type: "spring", stiffness: 200 }}
@@ -90,21 +91,29 @@ function EducationCard({ edu, index }: { edu: (typeof educationData)[0]; index: 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <GraduationCap size={16} className="text-primary flex-shrink-0" />
-              <h3 className="text-lg font-bold text-foreground leading-tight">{edu.degree}</h3>
+              <h3 className="text-lg font-bold text-foreground leading-tight">
+                <E id={`edu-${index}-degree`}>{edu.degree}</E>
+              </h3>
             </div>
-            <p className="text-muted-foreground font-medium">{edu.institution}</p>
-            <p className="text-muted-foreground/60 text-sm font-mono mt-0.5">{edu.location}</p>
+            <p className="text-muted-foreground font-medium">
+              <E id={`edu-${index}-institution`}>{edu.institution}</E>
+            </p>
+            <p className="text-muted-foreground/60 text-sm mt-0.5">
+              <E id={`edu-${index}-location`}>{edu.location}</E>
+            </p>
           </div>
-          <div className="flex flex-col items-start md:items-end font-mono text-sm gap-1 flex-shrink-0">
-            <motion.span
+          <div className="flex flex-col items-start md:items-end text-sm gap-1 flex-shrink-0">
+            <motion.div
               className="text-primary font-bold text-base"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ delay: index * 0.18 + 0.6 }}
             >
-              {edu.score}
-            </motion.span>
-            <span className="text-muted-foreground bg-secondary px-2 py-0.5 rounded text-xs">{edu.date}</span>
+              <E id={`edu-${index}-score`}>{edu.score}</E>
+            </motion.div>
+            <span className="text-muted-foreground bg-secondary px-2 py-0.5 rounded text-xs">
+              <E id={`edu-${index}-date`}>{edu.date}</E>
+            </span>
           </div>
         </div>
       </motion.div>
@@ -120,12 +129,13 @@ export default function Education() {
     <section id="education" className="scroll-mt-24">
       <div ref={headingRef} className="mb-12">
         <motion.h2
-          className="text-3xl font-bold flex items-center font-mono mb-3"
+          className="text-3xl font-bold flex items-center mb-3"
           initial={{ opacity: 0, y: -20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-primary mr-3 text-xl">// 01.</span>education
+          <span className="text-primary mr-3 text-xl">// 01.</span>
+          <E id="education-heading">education</E>
         </motion.h2>
         <motion.div
           className="h-px bg-gradient-to-r from-primary/60 via-primary/20 to-transparent"
