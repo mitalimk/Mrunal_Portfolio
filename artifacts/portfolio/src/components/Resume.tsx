@@ -60,7 +60,7 @@ export default function Resume() {
           animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-primary mr-3 text-xl">// 06.</span>
+          <span className="text-primary mr-3 text-xl">// 07.</span>
           <E id="resume-heading">resume</E>
         </motion.h2>
         <motion.div

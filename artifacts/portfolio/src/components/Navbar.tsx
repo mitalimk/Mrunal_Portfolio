@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "Skills", id: "skills" },
     { name: "Projects", id: "projects" },
     { name: "Achievements", id: "achievements" },
+    { name: "Roles", id: "responsibilities" },
     { name: "Resume", id: "resume" },
   ];
 
@@ -49,7 +50,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <a
           href="#about"
-          className="font-mono text-xl font-bold text-primary glow-green"
+          className="font-bold text-xl text-primary glow-green"
           onClick={(e) => {
             e.preventDefault();
             handleNavClick("about");
@@ -64,7 +65,7 @@ export default function Navbar() {
             <button
               key={link.id}
               onClick={() => handleNavClick(link.id)}
-              className={`text-sm font-mono transition-colors hover:text-primary ${
+              className={`text-sm transition-colors hover:text-primary ${
                 activeSection === link.id ? "text-primary" : "text-muted-foreground"
               }`}
             >
@@ -91,7 +92,7 @@ export default function Navbar() {
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.id)}
-                className={`py-3 text-left font-mono text-sm border-b border-border/50 last:border-none ${
+                className={`py-3 text-left text-sm border-b border-border/50 last:border-none ${
                   activeSection === link.id ? "text-primary" : "text-foreground"
                 }`}
               >
