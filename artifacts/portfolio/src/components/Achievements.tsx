@@ -1,20 +1,29 @@
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Trophy, Plus, X, ZoomIn, Camera } from "lucide-react";
+import { Trophy, ZoomIn, Camera } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { E } from "./EditableText";
+import img1 from "@assets/cer_1777730720875.jpeg";
+import img2 from "@assets/geoup_1777730720884.jpeg";
+import img3 from "@assets/my_1777730720885.jpeg";
 
-const ROTATIONS = [2.5, -3.2, 1.4, -2.1, 3.0, -1.8, 2.2, -2.8, 1.1, -3.5];
+const ROTATIONS = [2.5, -3.2, 1.4];
+
+const galleryImages = [
+  { src: img1, caption: "Certificate & Prize" },
+  { src: img2, caption: "Team Photo" },
+  { src: img3, caption: "WINGS 2025" },
+];
 
 function PolaroidCard({
   src,
+  caption,
   index,
-  onRemove,
   onOpen,
 }: {
   src: string;
+  caption: string;
   index: number;
-  onRemove: () => void;
   onOpen: () => void;
 }) {
   const rotate = ROTATIONS[index % ROTATIONS.length];
@@ -23,49 +32,22 @@ function PolaroidCard({
       className="relative cursor-pointer group"
       initial={{ opacity: 0, scale: 0.7, rotate: rotate - 15 }}
       animate={{ opacity: 1, scale: 1, rotate }}
-      exit={{ opacity: 0, scale: 0.5, rotate: rotate + 20 }}
-      transition={{ type: "spring", stiffness: 200, damping: 18, delay: index * 0.07 }}
+      transition={{ type: "spring", stiffness: 200, damping: 18, delay: index * 0.1 }}
       whileHover={{ rotate: 0, scale: 1.08, zIndex: 10 }}
       style={{ zIndex: index }}
       onClick={onOpen}
     >
-      <div className="bg-white p-2 pb-7 shadow-2xl rounded-sm">
+      {/* Polaroid frame */}
+      <div className="bg-white p-2 pb-8 shadow-2xl rounded-sm">
         <div className="w-full aspect-square overflow-hidden bg-gray-100">
-          <img src={src} alt={`Memory ${index + 1}`} className="w-full h-full object-cover" />
+          <img src={src} alt={caption} className="w-full h-full object-cover" />
         </div>
+        <p className="text-center text-[10px] text-gray-500 mt-2 font-mono truncate px-1">{caption}</p>
       </div>
-      <div className="absolute inset-2 bottom-7 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-sm">
-        <ZoomIn size={22} className="text-white" />
-      </div>
-      <button
-        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-black border border-white/30 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-20 hover:bg-red-500"
-        onClick={(e) => { e.stopPropagation(); onRemove(); }}
-      >
-        <X size={11} />
-      </button>
-    </motion.div>
-  );
-}
 
-function EmptyPolaroid({ index, onClick }: { index: number; onClick: () => void }) {
-  const rotate = ROTATIONS[(index + 4) % ROTATIONS.length];
-  return (
-    <motion.div
-      className="cursor-pointer group"
-      initial={{ opacity: 0, scale: 0.7 }}
-      animate={{ opacity: 1, scale: 1, rotate }}
-      whileHover={{ rotate: 0, scale: 1.05 }}
-      transition={{ type: "spring", stiffness: 180, damping: 18, delay: index * 0.05 }}
-      onClick={onClick}
-      style={{ zIndex: index }}
-    >
-      <div className="bg-white/5 border-2 border-dashed border-primary/25 p-2 pb-7 rounded-sm hover:border-primary/60 transition-colors">
-        <div className="w-full aspect-square flex flex-col items-center justify-center bg-primary/5 rounded-sm">
-          <Camera size={22} className="text-primary/40 group-hover:text-primary/70 transition-colors mb-1" />
-          <span className="text-[9px] text-primary/40 group-hover:text-primary/60 transition-colors text-center leading-tight px-1">
-            add photo
-          </span>
-        </div>
+      {/* Hover zoom overlay */}
+      <div className="absolute inset-2 bottom-8 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-sm">
+        <ZoomIn size={22} className="text-white" />
       </div>
     </motion.div>
   );
@@ -79,36 +61,7 @@ export default function Achievements() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const galleryInView = useInView(galleryRef, { once: false, margin: "-60px" });
 
-  const [galleryImages, setGalleryImages] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem("portfolio-achievement-images");
-      return stored ? JSON.parse(stored) : [];
-    } catch { return []; }
-  });
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      const updated = [...galleryImages, dataUrl];
-      setGalleryImages(updated);
-      try { localStorage.setItem("portfolio-achievement-images", JSON.stringify(updated)); } catch {}
-    };
-    reader.readAsDataURL(file);
-    e.target.value = "";
-  };
-
-  const removeImage = (index: number) => {
-    const updated = galleryImages.filter((_, i) => i !== index);
-    setGalleryImages(updated);
-    try { localStorage.setItem("portfolio-achievement-images", JSON.stringify(updated)); } catch {}
-  };
-
-  const emptySlots = Math.max(0, 3 - galleryImages.length);
 
   return (
     <section id="achievements" className="scroll-mt-24">
@@ -214,57 +167,24 @@ export default function Achievements() {
           <span className="text-xs text-muted-foreground">
             — <E id="gallery-subtitle">certificates &amp; snapshots</E>
           </span>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="ml-auto flex items-center gap-1.5 text-xs text-primary border border-primary/30 px-3 py-1.5 rounded-full hover:bg-primary/10 transition-colors"
-            data-testid="button-add-achievement-image"
-          >
-            <Plus size={12} /> Add Photo
-          </button>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 py-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 py-4">
           <AnimatePresence>
-            {galleryImages.map((src, idx) => (
+            {galleryImages.map((img, idx) => (
               <PolaroidCard
-                key={`img-${idx}`}
-                src={src}
+                key={idx}
+                src={img.src}
+                caption={img.caption}
                 index={idx}
-                onRemove={() => removeImage(idx)}
-                onOpen={() => setLightboxSrc(src)}
+                onOpen={() => setLightboxSrc(img.src)}
               />
             ))}
           </AnimatePresence>
-          {Array.from({ length: emptySlots }).map((_, i) => (
-            <EmptyPolaroid
-              key={`empty-${i}`}
-              index={i}
-              onClick={() => fileInputRef.current?.click()}
-            />
-          ))}
         </div>
-
-        <motion.p
-          className="text-xs text-muted-foreground/40 mt-4 ml-1"
-          initial={{ opacity: 0 }}
-          animate={galleryInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          {galleryImages.length === 0
-            ? "Click any frame or the Add Photo button to upload certificates and memories"
-            : `${galleryImages.length} photo${galleryImages.length !== 1 ? "s" : ""} — click to view, hover for remove`}
-        </motion.p>
       </div>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={addImage}
-        data-testid="input-achievement-image"
-      />
-
+      {/* Lightbox */}
       <Dialog open={!!lightboxSrc} onOpenChange={() => setLightboxSrc(null)}>
         <DialogContent className="max-w-3xl bg-card border-border p-3">
           <div className="bg-white p-3 pb-10 shadow-inner rounded-sm">
